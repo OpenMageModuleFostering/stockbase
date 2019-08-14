@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<config>
+
+    <modules>
+        <Divide_Stockbase>
+            <version>0.2.0</version>
+        </Divide_Stockbase>
+    </modules>
+
+    <global>
+        <helpers>
+            <Divide_Stockbase>
+                <class>Divide_Stockbase_Helper</class>
+            </Divide_Stockbase>
+        </helpers>
+        <models>
+            <stock>
+                <class>Divide_Stockbase_Model</class>
+                <resourceModel>stock_mysql4</resourceModel>
+            </stock>
+
+            <stock_mysql4>
+                <class>Divide_Stockbase_Model_Mysql4</class>
+                <entities>
+                    <stock>
+                        <table>stock</table>
+                    </stock>
+                </entities>
+            </stock_mysql4>
+        </models>
+        <resources>
+            <stock_setup>
+                <setup>
+                    <module>Divide_Stockbase</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </stock_setup>
+            <stock_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </stock_write>
+            <stock_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </stock_read>
+        </resources>
+        <blocks>
+            <stockbase>
+                <class>Divide_Stockbase_Block</class>
+            </stockbase>
+        </blocks>
+        <events>
+
+            <sales_order_payment_pay>
+                <observers>
+                    <Divide_Stockbase_Model_Observer>
+                        <type>singleton</type>
+                        <class>Divide_Stockbase_Model_Observer</class>
+                        <method>afterPayment</method>
+                    </Divide_Stockbase_Model_Observer>
+                </observers>
+            </sales_order_payment_pay>
+        </events>
+    </global>
+
+    <admin>
+        <routers>
+            <stockbase>
+                <use>admin</use>
+                <args>
+                    <module>Divide_Stockbase</module>
+                    <frontName>stockbase</frontName>
+                </args>
+            </stockbase>
+        </routers>
+        <adminhtml>
+            <args>
+                <modules>
+                    <module before="Mage_Adminhtml">Stockbase_Adminhtml</module>
+                </modules>
+            </args>
+        </adminhtml>
+    </admin>
+
+    <adminhtml>
+        <menu>
+            <stockbase module="Divide_Stockbase" translate="title">
+                <title>Stockbase</title>
+                <sort_order>200</sort_order>
+                <children>
+                    <stock>
+                        <title>Module Status</title>
+                        <action>stockbase/adminhtml_config/index</action>
+                    </stock>
+                </children>
+            </stockbase>
+        </menu>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <stockbase_options>
+                                            <title>Stockbase Module Section</title>
+                                        </stockbase_options>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        <translate>
+            <modules>
+                <translations>
+                    <files>
+                        <default>Divide_Stockbase.csv</default>
+                    </files>
+                </translations>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <stockbase>
+                    <file>stockbase.xml</file>
+                </stockbase>
+            </updates>
+         </layout>
+    </adminhtml>
+
+    <crontab>
+        <jobs>
+            <stockbase_noos_cron>
+                <schedule>
+                    <cron_expr>0 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>stock/crons::runNoos</model>
+                </run>
+            </stockbase_noos_cron>
+            <stockbase_image_cron>
+                <schedule>
+                    <cron_expr>*/30 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>stock/crons::runImageImport</model>
+                </run>
+            </stockbase_image_cron>
+        </jobs>
+    </crontab>
+
+</config>

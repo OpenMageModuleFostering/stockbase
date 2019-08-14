@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package>
+    <name>Stockbase</name>
+    <version>0.2.0</version>
+    <stability>stable</stability>
+    <license uri="https://opensource.org/licenses/GPL-3.0">GPL-3.0</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>This module allows connecting your Stockbase account with your Magento webshop, allowing it to make use of the extra inventory offered by Stockbase.</summary>
+    <description>This module requires you to have a Stockbase account with username and password. After installing the module you have to connect it to your Stockbase account using the configuration page in the Magento administration. After configuration you can make use of the following features:&#xD;
+ &#xD;
+- Image import: The module will check your stock levels and make a match based on EAN. If there are any images found at Stockbase, they will automatically be downloaded to your webshop and added to the product.&#xD;
+ &#xD;
+- Products that are never-out-of-stock: Enabling this feature will give your shop an extra warehouse with its own stock. The connected suppliers and brands in your Stockbase account will be checked when receiving an order with an out-of-stock product. If the out-of-stock product is available for order in Stockbase, the order will be forwarded to the Stockbase internal order handling service, and the product will be shipped to the customer on your behalf.&#xD;
+&#xD;
+</description>
+    <notes>Stable release version 0.2.0</notes>
+    <authors><author><name>Divide BV</name><user>Stockbase</user><email>support@stockbase.nl</email></author></authors>
+    <date>2016-08-29</date>
+    <time>09:29:22</time>
+    <contents><target name="magelocal"><dir name="Divide"><dir name="Stockbase"><dir name="Block"><file name="Config.php" hash="1ffe8997341bb531575d1202dc38aa7e"/></dir><dir name="Helper"><file name="Data.php" hash="ca8e9ab91ed7a276fe314386f9363ccc"/><file name="HTTP.php" hash="2697599b58371210ac4159e66435f4c5"/></dir><dir name="Model"><file name="Crons.php" hash="109c7171302e00048f428636ff63bc47"/><file name="Enviroment.php" hash="1669ade12c8620b8d2325368df9a94b3"/><file name="Observer.php" hash="16997e04ff0481f6c195d7cfff159779"/><file name="Options.php" hash="01a21925356ad2114115ffda1d921a2e"/></dir><dir name="controllers"><dir name="Adminhtml"><file name="ConfigController.php" hash="12957f4fd1fe0abd3b054743666ed5d6"/></dir></dir><dir name="etc"><file name="config.xml" hash="9d8401fab6f5e8f0e6e4a206a998b180"/><file name="system.xml" hash="bd64fac936007a3fd60b72dc600ef704"/></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Divide_Stockbase.xml" hash="6dda151a88f221db20bd30afe0a1fb54"/></dir></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.4.0</min><max>6.0.0</max></php></required></dependencies>
+</package>

@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/Stockbase",
+    "type": "magento-module",
+    "license": "GPL-3.0",
+    "homepage": "",
+    "description": "This module allows connecting your Stockbase account with your Magento webshop, allowing it to make use of the extra inventory offered by Stockbase.",
+    "authors": [
+    {
+        "name": "Divide BV",
+        "email": "support@stockbase.nl"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}

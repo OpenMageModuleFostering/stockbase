@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Divide_Stockbase>
+            <active>true</active>
+            <codePool>local</codePool>
+            <version>0.2.0</version>
+        </Divide_Stockbase>
+    </modules>
+</config>
