@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Divide_Stockbase>
-            <version>1.0.0</version>
+            <version>1.0.3</version>
         </Divide_Stockbase>
     </modules>
     <global>

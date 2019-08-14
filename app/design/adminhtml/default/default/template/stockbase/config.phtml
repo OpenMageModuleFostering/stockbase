@@ -1,0 +1,23 @@
+
+<table border="1" cellpadding="1" cellspacing="1" width="100%">
+    <tbody>
+        <tr>
+            <th colspan="2">
+                <h5><?php echo $this->__('stockbase module status'); ?></h5>
+            </th>
+        </tr>
+        <tr>
+            <th><?php echo $this->__('configuration name'); ?></th>
+            <th><?php echo $this->__('configuration value'); ?></th>
+        </tr>
+        <?php
+        foreach ($this->getStockbaseConfiguration() as $key => $value) {
+            
+            echo '<tr align="">';
+            echo '<td style="padding: 3px">' . $this->__($key) . '</td>';
+            echo '<td style="padding: 3px">' . $value . '</td>';
+            echo '</tr>';
+        }
+        ?>
+    </tbody>
+</table>
