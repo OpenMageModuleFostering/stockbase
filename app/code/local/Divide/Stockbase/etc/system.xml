@@ -1,13 +1,11 @@
 <?xml version="1.0"?>
 <config>
-    
     <tabs>
         <stockbaseconfig translate="label" module="Divide_Stockbase">
             <label>Stockbase</label>
             <sort_order>160</sort_order>
         </stockbaseconfig>
     </tabs>
-
     <sections>
         <stockbase_options translate="label" module="Divide_Stockbase">
             <label>Settings</label>
@@ -111,5 +109,4 @@
             </groups>
         </stockbase_options>
     </sections>
-    
 </config>

@@ -32,8 +32,9 @@ class Divide_Stockbase_Model_Observer
         $invoice = $observer->getInvoice();
         $order = $invoice->getOrder();
         $orderedProducts = $order->getAllItems();
+        $moduleEnabled = Mage::getStoreConfig('stockbase_options/login/stockbase_active');
 
-        if ($order) {
+        if ($order && $moduleEnabled) {
             // Always rely on own stock first, so stockbase does not always get triggerd.
             $sendItToStockbase = false;
             foreach ($orderedProducts as $orderedProduct) {
@@ -43,17 +44,19 @@ class Divide_Stockbase_Model_Observer
                     - $orderedProduct->getQtyShipped()
                     - $orderedProduct->getQtyRefunded()
                     - $orderedProduct->getQtyCanceled();
-                $finalQty[$orderedProduct->getId()] = $baseQty;
+                $finalQty[$productId] = $baseQty;
                 $ownStockQty = $orderedProduct->getProduct()->getStockItem()->getQty();
 
                 if ($ownStockQty <= 0 || $ownStockQty <= $baseQty) {
                     $sendItToStockbase = true;
                 }
             }
-
+            
+            // Only send if own stock is too low
             if ($sendItToStockbase == true) {
                 $send = $http->sendMageOrder($order);
-
+                
+                // Add status history to order to identify Stockbase orders 
                 if ($send) {
                     $order->addStatusHistoryComment('This order was send to stockbase.');
                     $order->save();

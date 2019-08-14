@@ -1,24 +1,34 @@
 <?xml version="1.0"?>
 <package>
     <name>Stockbase</name>
-    <version>0.2.0</version>
+    <version>1.0.2</version>
     <stability>stable</stability>
     <license uri="https://opensource.org/licenses/GPL-3.0">GPL-3.0</license>
     <channel>community</channel>
     <extends/>
     <summary>This module allows connecting your Stockbase account with your Magento webshop, allowing it to make use of the extra inventory offered by Stockbase.</summary>
     <description>This module requires you to have a Stockbase account with username and password. After installing the module you have to connect it to your Stockbase account using the configuration page in the Magento administration. After configuration you can make use of the following features:&#xD;
- &#xD;
-- Image import: The module will check your stock levels and make a match based on EAN. If there are any images found at Stockbase, they will automatically be downloaded to your webshop and added to the product.&#xD;
- &#xD;
-- Products that are never-out-of-stock: Enabling this feature will give your shop an extra warehouse with its own stock. The connected suppliers and brands in your Stockbase account will be checked when receiving an order with an out-of-stock product. If the out-of-stock product is available for order in Stockbase, the order will be forwarded to the Stockbase internal order handling service, and the product will be shipped to the customer on your behalf.&#xD;
 &#xD;
+Products never-out-of-stock:&#xD;
+The connected suppliers and brands in your Stockbase account will be checked when receiving an order with an out-of-stock product. The order will be forwarded to Stockbase when applicable&#xD;
+&#xD;
+Sending orders to stockbase&#xD;
+When the products are out-of-stock, the order will be forwarded to Stockbase's order handling service. Your own stock is not sufficient enough to fullfill the order. Products on your webshop can continue to be ordered, even when they are out of stock. Stockbase will take the order and deliver the desired quantity.&#xD;
+&#xD;
+Product image import&#xD;
+The module will compare your webshop's product inventory to your Stockbase account's inventory, based on EAN. If a match is found, the module will download any images from Stockbase to your webshop and add them to the product.&#xD;
 </description>
-    <notes>Stable release version 0.2.0</notes>
+    <notes>Release notes v1.0.2:&#xD;
+&#xD;
+- Fixed configuration for Order event observer to be enabled/disabled&#xD;
+- Added dutch translation&#xD;
+- Image import combined request to 1 call each cron run&#xD;
+- Fix of patch 6788 admin routing for Status page&#xD;
+</notes>
     <authors><author><name>Divide BV</name><user>Stockbase</user><email>support@stockbase.nl</email></author></authors>
-    <date>2016-08-29</date>
-    <time>09:29:22</time>
-    <contents><target name="magelocal"><dir name="Divide"><dir name="Stockbase"><dir name="Block"><file name="Config.php" hash="1ffe8997341bb531575d1202dc38aa7e"/></dir><dir name="Helper"><file name="Data.php" hash="ca8e9ab91ed7a276fe314386f9363ccc"/><file name="HTTP.php" hash="2697599b58371210ac4159e66435f4c5"/></dir><dir name="Model"><file name="Crons.php" hash="109c7171302e00048f428636ff63bc47"/><file name="Enviroment.php" hash="1669ade12c8620b8d2325368df9a94b3"/><file name="Observer.php" hash="16997e04ff0481f6c195d7cfff159779"/><file name="Options.php" hash="01a21925356ad2114115ffda1d921a2e"/></dir><dir name="controllers"><dir name="Adminhtml"><file name="ConfigController.php" hash="12957f4fd1fe0abd3b054743666ed5d6"/></dir></dir><dir name="etc"><file name="config.xml" hash="9d8401fab6f5e8f0e6e4a206a998b180"/><file name="system.xml" hash="bd64fac936007a3fd60b72dc600ef704"/></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Divide_Stockbase.xml" hash="6dda151a88f221db20bd30afe0a1fb54"/></dir></target></contents>
+    <date>2016-09-22</date>
+    <time>13:22:02</time>
+    <contents><target name="magelocal"><dir name="Divide"><dir name="Stockbase"><dir name="Block"><file name="Config.php" hash="8e7dc3df9eed45c8900436888590e604"/></dir><dir name="Helper"><file name="Data.php" hash="604fdc3a6c55e38092b9273ba57e29b1"/><file name="HTTP.php" hash="32cbc78fc27516815f304a6a073685a0"/></dir><dir name="Model"><file name="Crons.php" hash="6aac78bf53dd319c879e3cc4e4f28076"/><file name="Enviroment.php" hash="03258d9afaa6121144260001f4ad518a"/><file name="Observer.php" hash="6d4aae3551083b731c4df1a3f1923f17"/><file name="Options.php" hash="ec70a8490684ddd27db168cae92d48eb"/></dir><dir name="controllers"><dir name="Adminhtml"><file name="ConfigController.php" hash="b56e1a7f9c5e3438d40f0c86465d3cd2"/></dir></dir><dir name="etc"><file name="config.xml" hash="8af12f6835ad02a97a5622e9bcc95af7"/><file name="system.xml" hash="e115570eb8fcaef89c1a310289d3cb16"/></dir></dir></dir><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="layout"><file name="stockbase.xml" hash=""/></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Divide_Stockbase.xml" hash="139d8286a7d19483736b5c6b3b854786"/></dir></target></contents>
     <compatible/>
     <dependencies><required><php><min>5.4.0</min><max>6.0.0</max></php></required></dependencies>
 </package>

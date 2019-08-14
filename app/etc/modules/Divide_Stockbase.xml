@@ -4,7 +4,7 @@
         <Divide_Stockbase>
             <active>true</active>
             <codePool>local</codePool>
-            <version>0.2.0</version>
+            <version>1.0.0</version>
         </Divide_Stockbase>
     </modules>
 </config>

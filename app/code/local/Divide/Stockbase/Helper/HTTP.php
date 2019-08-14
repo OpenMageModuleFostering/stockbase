@@ -71,14 +71,30 @@ class Divide_Stockbase_Helper_HTTP extends Mage_Core_Helper_Abstract
      */
     public function authenticate($refresh = false)
     {
-        $token = $refresh ? $this->refreshToken : $this->authToken;
-        if ($token == null) {
-            $this->login($this->username, $this->password);
+        $authClient = new Zend_Http_Client($this->env . self::ENDPOINT_AUTH);
+        $token = null;
+        
+        // if refresh true, use refresh, but if not set, use auth instead
+        if($refresh){
+            $token = Mage::getStoreConfig('stockbase_options/token/refresh');
         }
-        $this->client->setUri($this->env . self::ENDPOINT_AUTH);
-        $this->client->setHeaders('Authentication', $token);
-        $result = json_decode($this->client->request('GET')->getBody());
-
+        
+        // Possible that we dont have refresh token yet, then fallback on the auth token to present
+        if (!$token) {
+            $token = Mage::getStoreConfig('stockbase_options/token/auth');
+        }
+         
+        // If we still dont have token, login first then. 
+        if ($token == null) {
+            $token = $this->login();
+        }
+        
+        $authClient->setHeaders([
+            'Content-Type' => 'application/json',
+            'Authentication' => $token
+        ]);
+        
+        $result = json_decode($authClient->request('GET')->getBody());
         $response = $result->{'nl.divide.iq'};
 
         if ($response->answer == self::ANSWER_TOKEN_EXPIRED) {
@@ -86,14 +102,15 @@ class Divide_Stockbase_Helper_HTTP extends Mage_Core_Helper_Abstract
         }
 
         if ($response->answer == self::ANSWER_SUCCESS) {
-            if ($refresh) {
-                Mage::getModel('core/config')->saveConfig('stockbase_options/token/refresh', $response->refresh_token);
-            } else {
+            if(isset($response->refresh_token)){
                 Mage::getModel('core/config')
-                        ->saveConfig('stockbase_options/token/access', $response->access_token);
-                Mage::getModel('core/config')
-                        ->saveConfig('stockbase_options/token/access_expiration_date', $response->expiration_date);
+                    ->saveConfig('stockbase_options/token/refresh', $response->refresh_token);                
             }
+            Mage::getModel('core/config')
+                    ->saveConfig('stockbase_options/token/access', $response->access_token);
+            Mage::getModel('core/config')
+                    ->saveConfig('stockbase_options/token/access_expiration_date', $response->expiration_date);
+        
 
             return true;
         }
@@ -109,13 +126,22 @@ class Divide_Stockbase_Helper_HTTP extends Mage_Core_Helper_Abstract
      * @param    $password
      * @return   bool
      */
-    public function login($username, $password)
+    public function login($username = false, $password = false)
     {
-        $this->client->setUri($this->env . self::ENDPOINT_LOGIN);
-        $this->client->setHeaders('username', $username);
-        $this->client->setHeaders('password', $password);
-
-        $result = json_decode($this->client->request('POST')->getBody());
+        $loginClient = new Zend_Http_Client($this->env . self::ENDPOINT_LOGIN);
+        
+        if ($username == false || $password == false) {
+            $username = Mage::getStoreConfig('stockbase_options/login/username');
+            $password = Mage::getStoreConfig('stockbase_options/login/password');
+        }
+        
+        $loginClient->setHeaders([
+            'Content-Type' => 'application/json',
+            'Username' => $username,
+            'Password' => $password
+        ]);
+        
+        $result = json_decode($loginClient->request('GET')->getBody());
         $response = $result->{'nl.divide.iq'};
 
         if ($response->answer == self::ANSWER_SUCCESS) {
@@ -124,7 +150,7 @@ class Divide_Stockbase_Helper_HTTP extends Mage_Core_Helper_Abstract
             Mage::getModel('core/config')
                     ->saveConfig('stockbase_options/token/auth_expiration_date', $response->expiration_date);
 
-            return true;
+            return $response->authentication_token;
         }
 
         return false;
@@ -362,64 +388,87 @@ class Divide_Stockbase_Helper_HTTP extends Mage_Core_Helper_Abstract
     /**
      * Will return image if available at stockbase for given EAN.
      *
-     * @param string $ean
+     * @param string|array $ean
      */
     public function getImageForEan($ean)
     {
-        $this->client->setUri($this->env . self::ENDPOINT_STOCKBASE_IMAGES . "?ean={$ean}");
-        $this->client->setHeaders('Authentication', $this->accessToken);
-        $this->client->setHeaders('ean', $ean);
-        $result = json_decode($this->client->request()->getBody());
-        $images = $result->{'nl.divide.iq'}->response->content->Items;
+        $collectionEan = [];
 
-        return $images;
+        if (is_array($ean)) {
+            foreach ($ean as $singleEAN) {
+                $collectionEan[] = $singleEAN;
+            }
+            $collectionEan = implode(',', $collectionEan);
+        } else {
+            $collectionEan = $ean;
+        }
+
+        $imageClient = new Zend_Http_Client($this->env . self::ENDPOINT_STOCKBASE_IMAGES . '?ean='.$collectionEan);
+        
+        $imageClient->setHeaders([
+            'Content-Type' => 'application/json',
+            'Authentication' => Mage::getStoreConfig('stockbase_options/token/access')
+        ]);
+        
+        $result = json_decode($imageClient->request()->getBody())->{'nl.divide.iq'};
+
+        if($result->response->answer == self::ANSWER_SUCCESS){
+            return $result->response->content->Items;
+        }
+        
+        return false;
     }
 
     /**
      * Saves images array from stockbase for given $ean
      *
-     * @param object $images
-     * @param string $ean
+     * @param array $images
+     *
+     * @return bool
      */
-    public function saveImageForProduct($images, $ean)
+    public function saveImageForProduct($images)
     {
-        $product = Mage::getModel('catalog/product')->loadByAttribute(
-            Mage::getStoreConfig('stockbase_options/login/stockbase_ean_field'),
-            $ean
-        );
-
-        $addedImages = [];
-        if ($product) {
-            foreach ($images as $image) {
-                $imageUrl = $image->Url;
-                $ext = substr(strrchr($imageUrl, "."), 1);
-                $tempName = basename($imageUrl);
-                $filePath = Mage::getBaseDir('media') . DS . 'import' . DS . $tempName;
-
-                $client = new Varien_Http_Client($imageUrl);
-                $client->setMethod(Varien_Http_Client::GET);
-                $client->setHeaders('Authentication', Mage::getStoreConfig('stockbase_options/token/access'));
-                $protectedImage = $client->request()->getBody();
-
-                $io = new Varien_Io_File();
-                $io->write($filePath, $protectedImage);
-
-                if ($io->fileExists($filePath)) {
-                    if ($product->getMediaGallery() == null) {
-                        $product->setMediaGallery(['images' => [], 'values' => []]);
-                    }
-                    $product->addImageToMediaGallery(
-                        $filePath,
-                        ['image', 'small_image', 'thumbnail'],
-                        false,
-                        false
-                    );
-                    $addedImages[] = $filePath;
-                }
-            }
-            $product->save();
+        $productModel = Mage::getModel('catalog/product');
+        $eanField = Mage::getStoreConfig('stockbase_options/login/stockbase_ean_field');
+        $accessToken = Mage::getStoreConfig('stockbase_options/token/access');
+        $tempFolder = Mage::getBaseDir('media') . DS . 'tmp';
+        $io = new Varien_Io_File();
+        $addedProducts = [];
+        
+        foreach ($images as $image) {
+            $product = $productModel->loadByAttribute($eanField, $image->EAN);
+            $io->checkAndCreateFolder($tempFolder);
+            $filePath = $tempFolder . DS . basename($image->Url);
             
-            return $addedImages;
+            // Continue looping, if we dont have product, we have nothing.
+            if(!$product){
+                continue;
+            }
+
+            $client = new Varien_Http_Client($image->Url);
+            $client->setMethod(Varien_Http_Client::GET);
+            $client->setHeaders('Authentication', $accessToken);
+            $protectedImage = $client->request()->getBody();
+
+            if($io->isWriteable($tempFolder)){
+                $io->write($filePath, $protectedImage);
+            }
+            
+            // Verify written file exsist
+            if ($io->fileExists($filePath)) {
+                if ($product->getMediaGallery() == null) {
+                    $product->setMediaGallery(['images' => [], 'values' => []]);
+                }
+                $product->addImageToMediaGallery(
+                    $filePath,
+                    ['image', 'small_image', 'thumbnail'],
+                    false,
+                    false
+                );
+                $product->save();
+            }
         }
+        
+        return true;
     }
 }

@@ -2,7 +2,6 @@
 
 class Divide_Stockbase_Adminhtml_ConfigController extends Mage_Adminhtml_Controller_Action
 {
-    
     /**
      * indexAction for config page of Stockbase
      * 

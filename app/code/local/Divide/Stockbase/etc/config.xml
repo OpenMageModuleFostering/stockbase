@@ -1,12 +1,10 @@
 <?xml version="1.0"?>
 <config>
-
     <modules>
         <Divide_Stockbase>
-            <version>0.2.0</version>
+            <version>1.0.0</version>
         </Divide_Stockbase>
     </modules>
-
     <global>
         <helpers>
             <Divide_Stockbase>
@@ -18,7 +16,6 @@
                 <class>Divide_Stockbase_Model</class>
                 <resourceModel>stock_mysql4</resourceModel>
             </stock>
-
             <stock_mysql4>
                 <class>Divide_Stockbase_Model_Mysql4</class>
                 <entities>
@@ -54,7 +51,6 @@
             </stockbase>
         </blocks>
         <events>
-
             <sales_order_payment_pay>
                 <observers>
                     <Divide_Stockbase_Model_Observer>
@@ -66,26 +62,17 @@
             </sales_order_payment_pay>
         </events>
     </global>
-
     <admin>
         <routers>
-            <stockbase>
-                <use>admin</use>
+            <adminhtml>
                 <args>
-                    <module>Divide_Stockbase</module>
-                    <frontName>stockbase</frontName>
+                    <modules>
+                        <Divide_Stockbase before="Mage_Adminhtml">Divide_Stockbase_Adminhtml</Divide_Stockbase>
+                    </modules>
                 </args>
-            </stockbase>
+            </adminhtml>
         </routers>
-        <adminhtml>
-            <args>
-                <modules>
-                    <module before="Mage_Adminhtml">Stockbase_Adminhtml</module>
-                </modules>
-            </args>
-        </adminhtml>
     </admin>
-
     <adminhtml>
         <menu>
             <stockbase module="Divide_Stockbase" translate="title">
@@ -94,8 +81,12 @@
                 <children>
                     <stock>
                         <title>Module Status</title>
-                        <action>stockbase/adminhtml_config/index</action>
+                        <action>adminhtml/config/index</action>
                     </stock>
+                    <configuration>
+                        <title>Configuration</title>
+                        <action>adminhtml/system_config/edit/section/stockbase_options</action>
+                    </configuration>
                 </children>
             </stockbase>
         </menu>
@@ -133,9 +124,8 @@
                     <file>stockbase.xml</file>
                 </stockbase>
             </updates>
-         </layout>
+        </layout>
     </adminhtml>
-
     <crontab>
         <jobs>
             <stockbase_noos_cron>
@@ -156,5 +146,4 @@
             </stockbase_image_cron>
         </jobs>
     </crontab>
-
 </config>
