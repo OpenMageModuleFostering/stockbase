@@ -5,15 +5,15 @@ class Divide_Stockbase_Model_Options
     /**
      * Return options for EAN selection from all the created
      * attributes in magento. When user adds new fields to productattributes
-     * this will fetch them and display them to be used as custom EAN field. 
+     * this will fetch them and display them to be used as custom EAN field.
      * We default to 'sku' field
-     * 
+     *
      * @return array
      */
     public function toOptionArray()
     {
         $productAttrs = Mage::getResourceModel('catalog/product_attribute_collection');
-        $options = [];
+        $options = array();
 
         foreach ($productAttrs as $productAttr) {
             $code = $productAttr->getAttributeCode();
@@ -21,11 +21,11 @@ class Divide_Stockbase_Model_Options
             if (!$label) {
                 $label = $productAttr->getAttributeCode();
             }
-            
-            $options[] = [
+
+            $options[] = array(
                 'value' => $code,
-                'label' => $label
-            ];
+                'label' => $label,
+            );
         }
 
         return $options;

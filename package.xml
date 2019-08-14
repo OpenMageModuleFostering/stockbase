@@ -1,33 +1,32 @@
 <?xml version="1.0"?>
 <package>
     <name>Stockbase</name>
-    <version>1.0.3</version>
+    <version>1.1.1</version>
     <stability>stable</stability>
     <license uri="https://opensource.org/licenses/GPL-3.0">GPL-3.0</license>
     <channel>community</channel>
     <extends/>
     <summary>This module allows connecting your Stockbase account with your Magento webshop, allowing it to make use of the extra inventory offered by Stockbase.</summary>
     <description>This module requires you to have a Stockbase account with username and password. After installing the module you have to connect it to your Stockbase account using the configuration page in the Magento administration. After configuration you can make use of the following features:&#xD;
-&#xD;
-Products never-out-of-stock:&#xD;
-The connected suppliers and brands in your Stockbase account will be checked when receiving an order with an out-of-stock product. The order will be forwarded to Stockbase when applicable&#xD;
-&#xD;
-Sending orders to stockbase&#xD;
-When the products are out-of-stock, the order will be forwarded to Stockbase's order handling service. Your own stock is not sufficient enough to fullfill the order. Products on your webshop can continue to be ordered, even when they are out of stock. Stockbase will take the order and deliver the desired quantity.&#xD;
-&#xD;
-Product image import&#xD;
-The module will compare your webshop's product inventory to your Stockbase account's inventory, based on EAN. If a match is found, the module will download any images from Stockbase to your webshop and add them to the product.&#xD;
+ &#xD;
+ Products never-out-of-stock:&#xD;
+ The connected suppliers and brands in your Stockbase account will be checked when receiving an order with an out-of-stock product. The order will be forwarded to Stockbase when applicable&#xD;
+ &#xD;
+ Sending orders to stockbase&#xD;
+ When the products are out-of-stock, the order will be forwarded to Stockbase's order handling service. Your own stock is not sufficient enough to fullfill the order. Products on your webshop can continue to be ordered, even when they are out of stock. Stockbase will take the order and deliver the desired quantity.&#xD;
+ &#xD;
+ Product image import&#xD;
+ The module will compare your webshop's product inventory to your Stockbase account's inventory, based on EAN. If a match is found, the module will download any images from Stockbase to your webshop and add them to the product.&#xD;
 </description>
-    <notes>Release notes v1.0.3:&#xD;
+    <notes>Fixes:&#xD;
 &#xD;
-- Package structure fixed&#xD;
-- Minor bugfixes&#xD;
-- Added locale dutch &amp; english&#xD;
-</notes>
+- Image sync running perpetually when not permitted.&#xD;
+- Image sync single API call for all EANs to sync instead of 1 call per EAN&#xD;
+- Some code refactoring.</notes>
     <authors><author><name>Divide BV</name><user>Stockbase</user><email>support@stockbase.nl</email></author></authors>
-    <date>2016-09-27</date>
-    <time>12:00:44</time>
-    <contents><target name="magelocal"><dir name="Divide"><dir name="Stockbase"><dir name="Block"><file name="Config.php" hash="8e7dc3df9eed45c8900436888590e604"/></dir><dir name="Helper"><file name="Data.php" hash="604fdc3a6c55e38092b9273ba57e29b1"/><file name="HTTP.php" hash="32cbc78fc27516815f304a6a073685a0"/></dir><dir name="Model"><file name="Crons.php" hash="6aac78bf53dd319c879e3cc4e4f28076"/><file name="Enviroment.php" hash="03258d9afaa6121144260001f4ad518a"/><file name="Observer.php" hash="6d4aae3551083b731c4df1a3f1923f17"/><file name="Options.php" hash="ec70a8490684ddd27db168cae92d48eb"/></dir><dir name="controllers"><dir name="Adminhtml"><file name="ConfigController.php" hash="b56e1a7f9c5e3438d40f0c86465d3cd2"/></dir></dir><dir name="etc"><file name="config.xml" hash="8df060df60b4401c1307ffb964cf46e5"/><file name="system.xml" hash="e115570eb8fcaef89c1a310289d3cb16"/></dir></dir></dir></target><target name="magedesign"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="template"><dir name="stockbase"><file name="config.phtml" hash="62a961154f59879c7b5ee84921408db6"/></dir></dir><dir name="layout"><file name="stockbase.xml" hash="4fe5e4e52eab018f93b1415017e5c77e"/></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Divide_Stockbase.xml" hash="57143df3ed1cd2598bf5c928f625da91"/></dir></target><target name="magelocale"><dir name="en_US"><file name="Divide_Stockbase.csv" hash="148597a20354efcd0e9b4c6e2c951467"/></dir><dir name="nl_NL"><file name="Divide_Stockbase.csv" hash="c5fdf87abc7957bb5145df6432cda7fc"/></dir></target></contents>
+    <date>2016-11-25</date>
+    <time>16:21:13</time>
+    <contents><target name="magelocal"><dir name="Divide"><dir name="Stockbase"><dir name="Block"><file name="Config.php" hash="c3034e9095c4f81cc0c84e46ad8f1a33"/></dir><dir name="Helper"><file name="Data.php" hash="1b85819a6e5e77047ea1f577149fc464"/><file name="HTTP.php" hash="d4ed6cb86589e99fa339b294085be1c1"/></dir><dir name="Model"><file name="Crons.php" hash="d2aac7af7592c87718c6ca5c3f61ef6c"/><file name="Enviroment.php" hash="ffa4fe690896a16b025073c835ddf21b"/><file name="Observer.php" hash="0ba698231b1be6a96100c29b1973693e"/><file name="Options.php" hash="de03b037088ae67717fa50c7d5c9d853"/></dir><dir name="controllers"><dir name="Adminhtml"><file name="ConfigController.php" hash="9613fab861af4e60420dc09c299fb605"/></dir></dir><dir name="etc"><file name="config.xml" hash="6d49e166859a0bba238b03137b0f1f73"/><file name="system.xml" hash="139d172df653dd92eee3941757638d32"/></dir><dir name="sql"><dir name="stock_setup"><file name="mysql4-upgrade-1.0.4-1.1.0.php" hash="87e0b37603c2906edc6fb905f59d6c4e"/></dir></dir></dir></dir></target><target name="magedesign"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="template"><dir name="stockbase"><file name="config.phtml" hash="62a961154f59879c7b5ee84921408db6"/></dir></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Divide_Stockbase.xml" hash="57143df3ed1cd2598bf5c928f625da91"/></dir></target><target name="magelocale"><dir name="en_US"><file name="Divide_Stockbase.csv" hash="148597a20354efcd0e9b4c6e2c951467"/></dir><dir name="nl_NL"><file name="Divide_Stockbase.csv" hash="c5fdf87abc7957bb5145df6432cda7fc"/></dir></target></contents>
     <compatible/>
     <dependencies><required><php><min>5.4.0</min><max>6.0.0</max></php></required></dependencies>
 </package>

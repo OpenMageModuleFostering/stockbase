@@ -5,10 +5,10 @@ class Divide_Stockbase_Model_Observer
     /**
      * Event catch after sale has successfully been paid for. We check your
      * own stock levels against the ordered amount and if your stock has shortage
-     * we order the products for you at stockbase. Please login to  your Stockbase 
-     * account to see these orders. 
-     * 
-     * @param Varien_Event_Observer $observerObserver 
+     * we order the products for you at stockbase. Please login to  your Stockbase
+     * account to see these orders.
+     *
+     * @param Varien_Event_Observer $observerObserver
      */
     public function afterPayment(Varien_Event_Observer $observer)
     {
@@ -51,12 +51,12 @@ class Divide_Stockbase_Model_Observer
                     $sendItToStockbase = true;
                 }
             }
-            
+
             // Only send if own stock is too low
             if ($sendItToStockbase == true) {
                 $send = $http->sendMageOrder($order);
-                
-                // Add status history to order to identify Stockbase orders 
+
+                // Add status history to order to identify Stockbase orders
                 if ($send) {
                     $order->addStatusHistoryComment('This order was send to stockbase.');
                     $order->save();
