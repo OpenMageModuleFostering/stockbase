@@ -1,3 +1,5 @@
+
+
 ## Original Package Description
 
 This module allows connecting your Stockbase account with your Magento webshop, allowing it to make use of the extra inventory offered by Stockbase.
